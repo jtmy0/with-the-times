@@ -46,15 +46,15 @@ html,body{height:100%;background:#000;overflow:hidden;color:var(--ink);font-fami
 #fC{color:#9aa6ba}#tc{color:#5c6679}#tc b{color:var(--gold2);font-weight:400}
 #ticks{display:flex;gap:6px}#ticks i{width:18px;height:2px;background:var(--dim2);transition:all .4s}
 #ticks i.on{background:var(--gold2)}#ticks i.cur{width:40px;box-shadow:0 0 10px var(--gold2)}
-#frame{transition:opacity .6s}#stage.cine #frame{opacity:0}
-.lb{position:absolute;left:0;right:0;height:0;background:#000;z-index:70;transition:height 1.2s var(--snap)}
+#frame{transition:opacity .6s}#stage.cine #frame{opacity:0;visibility:hidden}
+.lb{pointer-events:none;position:absolute;left:0;right:0;height:0;background:#000;z-index:70;transition:height 1.2s var(--snap)}
 #lbT{top:0}#lbB{bottom:0}
 #stage.cine .lb{height:118px}
 #grain{position:absolute;inset:0;z-index:75;pointer-events:none;opacity:.07;mix-blend-mode:overlay}
 #streak{position:absolute;left:50%;top:50%;width:1800px;height:3px;margin:-1.5px 0 0 -900px;z-index:78;pointer-events:none;opacity:0;
   background:radial-gradient(ellipse at center,rgba(255,236,200,1) 0%,rgba(255,180,90,.7) 18%,rgba(255,140,60,0) 70%);filter:blur(.6px);transform:scaleX(.1)}
 #streak::after{content:"";position:absolute;left:30%;right:30%;top:-30px;bottom:-30px;background:radial-gradient(ellipse at center,rgba(255,190,110,.35),transparent 70%)}
-#hint{position:absolute;left:50%;bottom:150px;transform:translateX(-50%);z-index:76;font:13px/1 var(--mono);letter-spacing:.24em;color:var(--dim);transition:opacity 1s}
+#hint{pointer-events:none;position:absolute;left:50%;bottom:150px;transform:translateX(-50%);z-index:76;font:13px/1 var(--mono);letter-spacing:.24em;color:var(--dim);transition:opacity 1s}
 
 /* ================= S1 TITLE SEQUENCE ================= */
 #tunnel{position:absolute;inset:0;perspective:720px;perspective-origin:50% 50%;overflow:hidden;opacity:0;transition:opacity .4s}
@@ -732,28 +732,46 @@ mark.q{background:#fff1b8;color:inherit;border-radius:3px}
 
 /* ================= PV 视频 ================= */
 #pv .vh{top:138px;transition:opacity .5s}
-#pv .vframe{position:absolute;left:440px;top:300px;width:1040px;height:585px;border:1px solid rgba(236,200,135,.45);background:#03050a;box-shadow:0 40px 120px -30px #000,0 0 80px -40px rgba(236,200,135,.5);
+#pv .vframe{position:absolute;left:440px;top:300px;width:1040px;height:661px;border:1px solid rgba(236,200,135,.45);background:#03050a;box-shadow:0 40px 120px -30px #000,0 0 80px -40px rgba(236,200,135,.5);
   transition:opacity .9s var(--out),transform 1.1s var(--out),filter .9s var(--out),left .7s var(--snap),top .7s var(--snap),width .7s var(--snap),height .7s var(--snap),border-color .4s,box-shadow .4s}
-#pv .vframe::before,#pv .vframe::after{content:"";position:absolute;width:26px;height:26px;border:2px solid #ecc887;transition:opacity .4s}
+#pv .vframe::before,#pv .vframe::after{content:"";position:absolute;width:26px;height:26px;border:2px solid #ecc887;transition:opacity .4s;pointer-events:none}
 #pv .vframe::before{left:-8px;top:-8px;border-right:0;border-bottom:0}#pv .vframe::after{right:-8px;bottom:-8px;border-left:0;border-top:0}
-#pv video{width:100%;height:100%;display:block;object-fit:contain;background:#000;cursor:pointer}
-#pv .ph{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center}
+#pv video{width:100%;height:calc(100% - 76px);display:block;object-fit:contain;background:#000;cursor:pointer}
+#pv .ph{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;pointer-events:none}
 #pv .ph b{font:700 34px/1.4 var(--serif);color:#c4ccd8}
 #pv .ph span{font:400 13px/1.8 var(--mono);letter-spacing:.2em;color:#6f7a8e}
-#pv.novid .ph{display:flex}#pv.novid video,#pv.novid #pvmax,#pv.novid .play{display:none}
-#pv .play{position:absolute;left:50%;top:50%;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;border:1px solid rgba(236,200,135,.7);background:rgba(4,6,11,.5);pointer-events:none;transition:opacity .4s}
+#pv.novid .ph{display:flex}#pv.novid video,#pv.novid .pvcontrols,#pv.novid .play,#pv.novid #pvstatus{display:none}
+#pv .play{position:absolute;left:50%;top:calc((100% - 76px)/2);width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;border:1px solid rgba(236,200,135,.7);background:rgba(4,6,11,.5);pointer-events:none;transition:opacity .4s}
 #pv .play::after{content:"";position:absolute;left:44px;top:34px;border-left:32px solid #ecc887;border-top:21px solid transparent;border-bottom:21px solid transparent}
 #pv.playing .play,#pv.novid .play{opacity:0}
-#pvmax{all:unset;position:absolute;right:18px;bottom:18px;z-index:6;cursor:pointer;display:flex;align-items:center;gap:10px;padding:10px 14px;
-  font:400 13px/1 var(--mono);letter-spacing:.24em;color:#ecc887;background:rgba(4,6,11,.72);border:1px solid rgba(236,200,135,.5);opacity:.55;transition:opacity .3s,background .3s}
-#pvmax:hover{opacity:1;background:rgba(236,200,135,.16)}
+#pvstatus{position:absolute;left:18px;top:18px;z-index:5;display:flex;align-items:center;gap:10px;padding:9px 13px;border:1px solid rgba(236,200,135,.3);background:rgba(4,6,11,.8);color:#e8d6ae;font:400 19px/1.4 var(--sans);pointer-events:none}
+#pvstatus::before{content:"";display:none;width:14px;height:14px;border:2px solid rgba(236,200,135,.25);border-top-color:#ecc887;border-radius:50%}
+#pv.buffering #pvstatus::before{display:block;animation:pvspin .8s linear infinite}
+@keyframes pvspin{to{transform:rotate(360deg)}}
+#pv .pvcontrols{position:absolute;left:0;right:0;bottom:0;z-index:6;height:76px;display:flex;align-items:center;gap:16px;padding:12px 18px;background:#080d17;border-top:1px solid rgba(236,200,135,.2)}
+#pv .pvcontrols button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;gap:8px;min-height:42px;padding:0 14px;border:1px solid rgba(236,200,135,.4);background:rgba(236,200,135,.06);color:#ecc887;font:400 19px/1 var(--sans)}
+#pv .pvcontrols button:hover{background:rgba(236,200,135,.16)}
+#pv .pvcontrols button:focus-visible,#pvseek:focus-visible{outline:2px solid #ffe7b8;outline-offset:4px}
+#pv .pvcontrols button:disabled{opacity:.35;cursor:default}
+#pvtoggle{min-width:84px!important}
+#pvtime{flex-shrink:0;color:#d6deeb;font:400 17px/1 var(--mono);font-variant-numeric:tabular-nums}
+#pv .pvtrack{position:relative;flex:1;min-width:60px;height:36px;display:flex;align-items:center}
+#pv .pvtrack::before,#pvbuffer{position:absolute;left:0;top:15px;height:6px;border-radius:3px;pointer-events:none}
+#pv .pvtrack::before{content:"";right:0;background:#263040}
+#pvbuffer{width:0;background:#626c7b}
+#pvseek{-webkit-appearance:none;appearance:none;position:relative;z-index:1;width:100%;height:36px;margin:0;background:transparent;cursor:pointer;accent-color:#ecc887}
+#pvseek::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(to right,#ecc887 0 var(--played,0%),transparent var(--played,0%) 100%)}
+#pvseek::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-6px;border-radius:50%;background:#fff0c8;border:2px solid #c8913f}
+#pvseek::-moz-range-track{height:6px;background:transparent}
+#pvseek::-moz-range-progress{height:6px;background:#ecc887}
+#pvseek::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:#fff0c8;border:2px solid #c8913f}
+#pvseek:disabled{opacity:.35;cursor:default}
 #pvmax i{position:relative;width:14px;height:14px;display:block}
 #pvmax i::before,#pvmax i::after{content:"";position:absolute;width:6px;height:6px;border:2px solid #ecc887}
 #pvmax i::before{left:0;top:0;border-right:0;border-bottom:0}#pvmax i::after{right:0;bottom:0;border-left:0;border-top:0}
 #pv.max .vframe{left:0;top:0;width:1920px;height:1080px;border-color:transparent;box-shadow:none;z-index:20}
 #pv.max .vframe::before,#pv.max .vframe::after{opacity:0}
 #pv.max .vh{opacity:0}
-#pv.max #pvmax{opacity:.35}#pv.max #pvmax:hover{opacity:1}
 #stage.vmax .lb{height:0!important}#stage.vmax #frame,#stage.vmax #hint{opacity:0!important}
 
 
@@ -1173,9 +1191,16 @@ mark.q{background:#fff1b8;color:inherit;border-radius:3px}
 
   <section class="slide" id="pv" data-scene="AI 简史 — 1943 → 2026">
     <div class="ovl vh rv" data-s="0"><div class="kick" style="margin-bottom:22px"><b>AI 简史</b> · 1943 → 2026</div><h2 class="hx f84"><span class="chrome">七十多年</span>　<span class="gold">机器能思考吗<span class="pu">?</span></span></h2></div>
-    <div class="vframe rv z" data-s="0" style="--d:.3s"><video id="pvv" preload="metadata" playsinline class="noadv"></video>
-      <div class="ph"><b>视频内容稍后更新</b><span>敬请期待 · 可继续浏览下一页</span></div><div class="play"></div>
-      <button id="pvmax" class="noadv" aria-label="放大或缩小视频"><i></i><span>全屏</span></button></div>
+    <div class="vframe rv z" data-s="0" style="--d:.3s"><video id="pvv" preload="metadata" playsinline class="noadv" aria-label="AI 简史视频"></video>
+      <div class="ph"><b>视频内容稍后更新</b><span>敬请期待 · 可继续浏览下一页</span></div><div class="play" aria-hidden="true"></div>
+      <div id="pvstatus" role="status" aria-live="polite"><span>正在加载视频…</span></div>
+      <div class="pvcontrols noadv" role="group" aria-label="视频控制">
+        <button id="pvtoggle" type="button" aria-controls="pvv" aria-label="播放视频">播放</button>
+        <span id="pvtime">0:00 / 0:00</span>
+        <div class="pvtrack"><span id="pvbuffer" aria-hidden="true"></span><input id="pvseek" type="range" min="0" max="0" value="0" step="0.1" aria-label="视频播放进度" aria-controls="pvv" disabled></div>
+        <button id="pvmax" type="button" aria-label="放大视频" aria-pressed="false"><i aria-hidden="true"></i><span>全屏</span></button>
+      </div>
+    </div>
   </section>
 
 
@@ -1839,25 +1864,78 @@ const P15=StepMod('p15',6,{set(n,dir){const z=n===3;$('#orb1').classList.toggle(
   $('#p15rt').textContent=z?'专业为零　AI 再强　结果也是零':'解决真实问题的能力';if(n===2&&dir>0){streak(898);Embers.kick(.6);}if(n===3&&dir>0)SFX.thud(1);}});
 
 
-/* ===================== PV 视频：点击播放 / 暂停，按钮、双击或 V 键放大缩小 ===================== */
+/* ===================== PV 视频：播放控制、进度和缓冲状态 ===================== */
 const PV=(()=>{
-  const root=$('#pv'),v=$('#pvv'),btn=$('#pvmax'),hasVideo=Boolean(CONTENT.video);let byUs=false;
-  v.addEventListener('error',()=>{root.classList.add('novid');btn.disabled=true;root.querySelector('.ph b').textContent='视频暂时无法播放';root.querySelector('.ph span').textContent='请稍后再试 · 可继续浏览下一页';});
-  v.addEventListener('loadeddata',()=>{root.classList.remove('novid');btn.disabled=false;});
-  v.addEventListener('play',()=>root.classList.add('playing'));v.addEventListener('pause',()=>root.classList.remove('playing'));
-  v.addEventListener('click',e=>{e.stopPropagation();v.paused?v.play().catch(()=>{}):v.pause();});
-  function setMax(on){if(on&&(!hasVideo||root.classList.contains('novid')))return;if(on===root.classList.contains('max'))return;
-    root.classList.toggle('max',on);stage.classList.toggle('vmax',on);btn.querySelector('span').textContent=on?'退出全屏':'全屏';SFX.whoosh(.8,.6,on?300:2400,on?3600:400);
+  const root=$('#pv'),v=$('#pvv'),btn=$('#pvmax'),playBtn=$('#pvtoggle'),seek=$('#pvseek'),time=$('#pvtime'),buffer=$('#pvbuffer'),status=$('#pvstatus span'),controls=root.querySelector('.pvcontrols'),hasVideo=Boolean(CONTENT.video);
+  let byUs=false,active=false,waiting=false,scrubbing=false,userPaused=false,playRequest=0,playMessage='';
+  const duration=()=>Number.isFinite(v.duration)&&v.duration>0?v.duration:0;
+  const stamp=n=>{n=Math.max(0,Math.floor(Number.isFinite(n)?n:0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0');};
+  function render(){
+    const length=duration(),position=Math.max(0,v.currentTime||0),playing=!v.paused&&!v.ended;
+    root.classList.toggle('playing',playing);
+    const loading=active&&hasVideo&&!v.error&&!v.ended&&!playMessage&&(v.seeking||(!v.paused&&(waiting||v.readyState<3))||(v.readyState===0&&!userPaused));
+    root.classList.toggle('buffering',loading);
+    const label=v.ended?'重播':playing?'暂停':'播放';
+    playBtn.textContent=label;playBtn.setAttribute('aria-label',label+'视频');playBtn.disabled=!hasVideo||Boolean(v.error);btn.disabled=playBtn.disabled;
+    seek.disabled=!length||Boolean(v.error);seek.max=String(length);
+    if(!scrubbing)seek.value=String(Math.min(position,length));
+    const shown=scrubbing?Number(seek.value):position;
+    time.textContent=stamp(shown)+' / '+stamp(length);
+    seek.style.setProperty('--played',(length?Math.min(100,shown/length*100):0)+'%');
+    seek.setAttribute('aria-valuetext',stamp(shown)+'，总时长 '+stamp(length));
+    let bufferedStart=0,bufferedEnd=0;for(let i=0;i<v.buffered.length;i++)if(v.buffered.start(i)<=position+.1&&v.buffered.end(i)>=position){bufferedStart=v.buffered.start(i);bufferedEnd=v.buffered.end(i);}
+    buffer.style.left=(length?bufferedStart/length*100:0)+'%';buffer.style.width=(length?Math.min(100,(bufferedEnd-bufferedStart)/length*100):0)+'%';
+    const message=!hasVideo?'视频内容稍后更新':v.error?'视频暂时无法播放':playMessage||(
+      v.ended?'播放完毕，点击重播':!active?'已暂停':v.seeking?'正在定位…':v.paused?(userPaused?'已暂停':v.readyState===0?'正在加载视频…':position>0?'已暂停':'点击播放'):
+      loading?'正在缓冲，请稍候…':'播放中');
+    if(status.textContent!==message)status.textContent=message;
+  }
+  function pauseVideo(userAction=false){playRequest++;if(userAction)userPaused=true;waiting=false;playMessage='';v.pause();render();}
+  function playVideo(){
+    if(!active||!hasVideo||v.error)return;
+    const request=++playRequest;playMessage='';userPaused=false;waiting=v.readyState<3;v.preload='auto';
+    if(v.ended)v.currentTime=0;
+    const pending=v.play();render();
+    pending.catch(error=>{
+      if(request!==playRequest||!active||error.name==='AbortError')return;
+      waiting=false;playMessage=error.name==='NotAllowedError'?'请点击播放按钮开始':'暂时无法播放，请点击重试';render();
+    });
+  }
+  const togglePlay=()=>v.paused||v.ended?playVideo():pauseVideo(true);
+  v.addEventListener('click',e=>{e.stopPropagation();togglePlay();});
+  playBtn.addEventListener('click',togglePlay);
+  controls.addEventListener('click',e=>e.stopPropagation());
+  controls.addEventListener('wheel',e=>{e.preventDefault();e.stopPropagation();},{passive:false});
+  controls.addEventListener('keydown',e=>{if([' ','Enter','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','PageUp','PageDown','Backspace'].includes(e.key))e.stopPropagation();});
+  seek.addEventListener('pointerdown',()=>{scrubbing=true;});
+  seek.addEventListener('input',()=>{if(!duration())return;playMessage='';v.currentTime=Math.min(duration(),Math.max(0,Number(seek.value)));render();});
+  const finishScrub=()=>{scrubbing=false;render();};
+  seek.addEventListener('change',finishScrub);seek.addEventListener('pointercancel',finishScrub);seek.addEventListener('blur',finishScrub);addEventListener('pointerup',()=>{if(scrubbing)finishScrub();});
+  for(const event of ['loadedmetadata','durationchange','timeupdate','progress','seeking','seeked','canplay'])v.addEventListener(event,render);
+  v.addEventListener('waiting',()=>{waiting=true;render();});
+  v.addEventListener('playing',()=>{waiting=false;playMessage='';render();});
+  v.addEventListener('play',render);
+  v.addEventListener('pause',()=>{waiting=false;render();});
+  v.addEventListener('ended',()=>{waiting=false;render();});
+  v.addEventListener('error',()=>{playRequest++;waiting=false;root.classList.add('novid');root.querySelector('.ph b').textContent='视频暂时无法播放';root.querySelector('.ph span').textContent='请刷新后再试 · 可继续浏览下一页';render();});
+  v.addEventListener('loadeddata',()=>{root.classList.remove('novid');render();});
+  function setMax(on){
+    if(on&&(!hasVideo||v.error))return;if(on===root.classList.contains('max'))return;
+    root.classList.toggle('max',on);stage.classList.toggle('vmax',on);btn.querySelector('span').textContent=on?'退出全屏':'全屏';
+    btn.setAttribute('aria-label',on?'缩小视频':'放大视频');btn.setAttribute('aria-pressed',String(on));SFX.whoosh(.8,.6,on?300:2400,on?3600:400);
     if(on&&!document.fullscreenElement){byUs=true;document.documentElement.requestFullscreen().catch(()=>{byUs=false;});}
-    if(!on&&byUs&&document.fullscreenElement){byUs=false;document.exitFullscreen().catch(()=>{});}}
-  const toggle=()=>setMax(!root.classList.contains('max'));
-  btn.addEventListener('click',e=>{e.stopPropagation();toggle();});
-  v.addEventListener('dblclick',e=>{e.stopPropagation();toggle();});
-  addEventListener('keydown',e=>{if(!root.classList.contains('active')||e.target.tagName==='INPUT')return;
-    if(e.key==='v'||e.key==='V')toggle();if(e.key==='Escape')setMax(false);});
+    if(!on&&byUs&&document.fullscreenElement){byUs=false;document.exitFullscreen().catch(()=>{});}
+  }
+  btn.addEventListener('click',()=>setMax(!root.classList.contains('max')));
+  addEventListener('keydown',e=>{if(!active)return;if(e.key==='Escape'){setMax(false);return;}if(e.target.tagName==='INPUT')return;if(e.key==='v'||e.key==='V')setMax(!root.classList.contains('max'));});
   document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&byUs){byUs=false;setMax(false);}});
-  root.classList.toggle('novid',!hasVideo);btn.disabled=!hasVideo;if(hasVideo)v.src=CONTENT.video;v.volume=.9;
-  return StepMod('pv',hasVideo?2:1,{cine:true,leave(){v.pause();setMax(false);},set(n){if(hasVideo&&n===1&&!root.classList.contains('novid'))v.play().catch(()=>{});else v.pause();}});
+  root.classList.toggle('novid',!hasVideo);if(hasVideo)v.src=CONTENT.video;v.volume=.9;render();
+  return StepMod('pv',hasVideo?2:1,{
+    cine:true,
+    enter(){active=true;v.preload='auto';render();},
+    leave(){active=false;scrubbing=false;pauseVideo();setMax(false);if(root.contains(document.activeElement))document.activeElement.blur();},
+    set(n){if(hasVideo&&n===1)playVideo();else pauseVideo();}
+  });
 })();
 
 
